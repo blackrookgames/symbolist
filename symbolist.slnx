@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="symbolist/symbolist.csproj" />
+  <Project Path="test/test.csproj" />
+</Solution>

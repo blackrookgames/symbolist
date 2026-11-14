@@ -1,0 +1,5 @@
+**/.secret/
+**/.venv/
+**/bin/
+**/obj/
+*.bat
