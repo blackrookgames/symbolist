@@ -1,41 +1,38 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using symbolist;
 
 namespace test
 {
-    public class TestList : SymbioticList<TestList, TestItem>
+    public class TestList : SymbioticKeyedList<TestList, TestItem, string>
     {
         protected override void PreAdd(TestItem item)
         {
             base.PreAdd(item);
-            Console.WriteLine($"Pre-add {item.Name}");
+            Console.WriteLine($"Pre-add {item.Key}");
         }
         
         protected override void PostAdd(TestItem item)
         {
             base.PostAdd(item);
-            Console.WriteLine($"Post-add {item.Name}");
+            Console.WriteLine($"Post-add {item.Key}");
         }
         
         protected override void PreRemove(TestItem item)
         {
             base.PreRemove(item);
-            Console.WriteLine($"Pre-remove {item.Name}");
+            Console.WriteLine($"Pre-remove {item.Key}");
         }
         
         protected override void PostRemove(TestItem item)
         {
             base.PostRemove(item);
-            Console.WriteLine($"Post-remove {item.Name}");
+            Console.WriteLine($"Post-remove {item.Key}");
         }
     }
 
-    public class TestItem : SymbioticItem<TestList, TestItem>
-    {
-        public new int Index => base.Index;
-
-        public string? Name;
-    }
+    public class TestItem : SymbioticKeyedItem<TestList, TestItem, string> { }
 
     public class Program
     {
@@ -45,17 +42,17 @@ namespace test
             void printList()
             {
                 foreach (var item in list)
-                    Console.WriteLine($"{item.Index,-10}{item.Name}");
+                    Console.WriteLine($"{item.Index,-10}{item.Key}");
                 Console.WriteLine();
             }
-            TestItem apple = new() { Name = "Apple", };
-            TestItem banana = new() { Name = "Banana", };
-            TestItem cherry = new() { Name = "Cherry", };
-            TestItem date = new() { Name = "Date", };
-            TestItem elderberry = new() { Name = "Elderberry", };
-            TestItem fig = new() { Name = "Fig", };
-            TestItem grape = new() { Name = "Grape", };
-            TestItem honeydew = new() { Name = "Honeydew", };
+            TestItem apple = new(); apple.SetKey("Apple");
+            TestItem banana = new(); banana.SetKey("Banana");
+            TestItem cherry = new(); cherry.SetKey("Cherry");
+            TestItem date = new(); date.SetKey("Date");
+            TestItem elderberry = new(); elderberry.SetKey("Elderberry");
+            TestItem fig = new(); fig.SetKey("Fig");
+            TestItem grape = new(); grape.SetKey("Grape");
+            TestItem honeydew = new(); honeydew.SetKey("Honeydew");
             list.Add(apple);
             list.Add(banana);
             list.Add(cherry);
@@ -66,7 +63,11 @@ namespace test
             list.Add(honeydew);
             Console.WriteLine();
             printList();
-            list.Clear();
+            list.Remove(apple);
+            apple.SetKey("Incaberry");
+            list.Add(apple);
+            Console.WriteLine();
+            Console.WriteLine($"Found the {list["Incaberry"].Key}");
             Console.WriteLine();
             printList();
         }

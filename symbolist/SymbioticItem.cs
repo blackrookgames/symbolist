@@ -1,6 +1,6 @@
 namespace symbolist
 {   
-    /// <summary>Represents a symbiotic list itme</summary>
+    /// <summary>Represents a symbiotic list item</summary>
     public abstract class SymbioticItem<TList, TItem>
         where TList: SymbioticBaseList<TList, TItem>
         where TItem: SymbioticItem<TList, TItem>
@@ -15,13 +15,13 @@ namespace symbolist
 
         #endregion
 
-        #region protected properties
+        #region properties
 
         /// <summary>List that the item belongs to</summary>
-        protected TList? List => f_List;
+        public TList? List => f_List;
 
         /// <summary>Index in the list (or -1 if the item is not part of a list)</summary>
-        protected int Index => f_Index;
+        public int Index => f_Index;
 
         #endregion
     }

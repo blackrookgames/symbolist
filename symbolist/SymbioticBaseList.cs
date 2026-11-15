@@ -86,7 +86,7 @@ namespace symbolist
             try
             {
                 if (item.f_List is null)
-                    return CanBeAdded(item);
+                    return MM_CanBeAdded(item) && CanBeAdded(item);
                 return false;
             }
             catch when (item is null)
@@ -104,7 +104,7 @@ namespace symbolist
             try
             {
                 if (item.f_List == this)
-                    return CanBeRemoved(item);
+                    return MM_CanBeRemoved(item) && CanBeRemoved(item);
                 return false;
             }
             catch when (item is null)
@@ -123,10 +123,12 @@ namespace symbolist
             {
                 if (CanAdd(item))
                 {
+                    MM_PreAdd(item);
                     PreAdd(item);
                     item.f_List = (TList)this;
                     item.f_Index = f_Items.Count;
                     f_Items.Add(item);
+                    MM_PostAdd(item);
                     PostAdd(item);
                     return true;
                 }
@@ -154,11 +156,13 @@ namespace symbolist
             {
                 if (CanAdd(item))
                 {
+                    MM_PreAdd(item);
                     PreAdd(item);
                     item.f_List = (TList)this;
                     item.f_Index = index;
                     f_Items.Insert(index, item);
                     MM_FixIndexes(index + 1);
+                    MM_PostAdd(item);
                     PostAdd(item);
                     return true;
                 }
@@ -180,11 +184,13 @@ namespace symbolist
             {
                 if (CanRemove(item))
                 {
+                    MM_PreRemove(item);
                     PreRemove(item);
                     f_Items.RemoveAt(item.f_Index);
                     MM_FixIndexes(item.f_Index);
                     item.f_List = null;
                     item.f_Index = -1;
+                    MM_PostRemove(item);
                     PostRemove(item);
                     return true;
                 }
@@ -313,6 +319,13 @@ namespace symbolist
         #endregion
 
         #region virtual
+
+        private protected virtual bool MM_CanBeAdded(TItem item) => true;
+        private protected virtual bool MM_CanBeRemoved(TItem item) => true;
+        private protected virtual void MM_PreAdd(TItem item) { }
+        private protected virtual void MM_PostAdd(TItem item) { }
+        private protected virtual void MM_PreRemove(TItem item) { }
+        private protected virtual void MM_PostRemove(TItem item) { }
 
         /// <summary>Implementer-defined checks on whether or not the specified item can be added to the list</summary>
         /// <param name="item">Item to add</param>
